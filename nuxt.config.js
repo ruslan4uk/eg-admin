@@ -37,6 +37,7 @@ export default {
     '@/plugins/mixins/validation',
     '@/plugins/mixins/user',
     '@/plugins/axios',
+    { src: '@/plugins/vue-editor', ssr: false },
   ],
 
   /*
@@ -68,7 +69,7 @@ export default {
   ** Axios module configuration
   */
   axios: {
-    baseURL: 'http://localhost:8000/api/v1/admin',
+    baseURL: 'http://api.excursguide.ru/api/v1/admin',
   },
 
   /**

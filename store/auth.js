@@ -7,7 +7,7 @@ export default {
             loggedIn: false,
             strategy: 'local',
             user: false,
-            baseImgPath: 'http://localhost:8000/storage/',
+            baseImgPath: 'http://api.excursguide.ru/storage/',
             subLoading: false,
         }
     },

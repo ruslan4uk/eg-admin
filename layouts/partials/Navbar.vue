@@ -9,6 +9,7 @@
                 <b-collapse id="nav-collapse" is-nav v-if="authenticated">
                     <b-navbar-nav>
                         <b-nav-item to="/dashboard">Dashboard</b-nav-item>
+                        <b-nav-item to="/articles">Articles</b-nav-item>
                         <b-nav-item to="/guides">Guides</b-nav-item>
                         <b-nav-item to="/tours">Tours</b-nav-item>
                         <b-nav-item to="/comments">Comments</b-nav-item>

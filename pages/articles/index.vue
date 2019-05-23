@@ -1,11 +1,11 @@
 <template>
     <b-container>
         <b-row>
-            <b-col>
-                <h3 class="mb-5">Tours</h3>
-
+            <b-col cols="12">
+                <h3 class="mb-5">Articles</h3>
+                <b-button variant="success" class="mb-4" @click="addArticle">Добавить статью</b-button>
                 <b-table striped hover 
-                        :items="tours.data" 
+                        :items="article.data" 
                         :fields="fields" 
                         :tbody-tr-class="rowClass"
                         :busy="subLoading">
@@ -15,32 +15,17 @@
                     </div>
                     <template slot="avatar" slot-scope="data">
                         <b-img-lazy 
-                            v-bind="{width: 50, height: 50, center: true, blank: true, blankColor: '#bbb',}" 
+                            v-bind="{width: 50, height: 50, blank: true, blankColor: '#bbb',}" 
                             :blank-src="require('~/assets/images/general/avatar-blank.jpg')"
                             :src="baseImgPath + data.item.avatar" 
                             rounded="circle"></b-img-lazy>
                     </template>
-                    <template slot="user" slot-scope="data">
-                        <div class="d-flex align-items-center">
-                        <b-img-lazy 
-                            v-bind="{width: 50, height: 50, blank: true, blankColor: '#bbb',}" 
-                            :blank-src="require('~/assets/images/general/avatar-blank.jpg')"
-                            :src="baseImgPath + data.item.user.avatar" 
-                            rounded="circle"
-                            class="mr-2"></b-img-lazy> 
-                            <strong>{{ data.item.user.name }}</strong>
-                        </div>
-                    </template>
                     <template slot="actions" slot-scope="data">
-                        <b-button pill variant="success" size="sm" class="mr-1" @click="setActive(data.item.id, 2)">
-                            <fa :icon="['fas', 'check']" />
-                        </b-button>
-
-                        <b-button pill variant="info" size="sm" class="mr-1" @click="showTour(data.item.id)">
+                        <b-button pill variant="info" size="sm" class="mr-1" @click="showArticle(data.item.id)">
                             <fa :icon="['fas', 'search']" />
                         </b-button>
 
-                        <b-button pill variant="danger" size="sm" class="mr-1" @click="deleteTour(data.item.id)">
+                        <b-button pill variant="danger" size="sm" class="mr-1" @click="deleteArticle(data.item.id)">
                             <fa :icon="['fas', 'trash']" />
                         </b-button>
                     </template>
@@ -50,7 +35,7 @@
                     class="mt-3 custom-pagination"
                     align="center"
                     :link-gen="linkGen" 
-                    :number-of-pages="tours.last_page" 
+                    :number-of-pages="article.last_page" 
                     use-router />   
             </b-col>
         </b-row>
@@ -58,15 +43,14 @@
 </template>
 
 <script>
-
 export default {
-    middleware: ['auth'],    
+    middleware: ['auth'],
 
     watchQuery: ['page'],
 
     data() {
         return {
-            fields: ['avatar', 'name', 'user', 'created_at', 'actions'],
+            fields: ['avatar', 'name', 'created_at', 'actions'],
             isBusy: false
         }
     },
@@ -78,7 +62,7 @@ export default {
         return store.$axios.get(route.path, {params: { page: query.page }})
             .then((res) => {
                 store.commit('auth/SET_SUB_LOADING', false)
-                return { tours: res.data.data }
+                return { article: res.data.data }
             })
             .catch((e) => {
                 error({ statusCode: 404, message: 'Guide not found' })
@@ -98,23 +82,10 @@ export default {
             }
         },
 
-        setActive(id, active) {
-            this.$axios.put(this.$route.path + '/' + id, {active: active}).then(res => {
-                this.tours.data[this.tours.data.findIndex(x => x.id === id)].active = active
-                this.$bvToast.toast('Экскурсия подтверждена', {
-                    title: 'Внимание!',
-                    autoHideDelay: 5000,
-                    variant: 'success',
-                    solid: true,
-                    toaster: 'b-toaster-bottom-right',
-                })    
-            })
-        },
-
-        deleteTour(id) {
+        deleteArticle(id) {
             this.$axios.delete(this.$route.path + '/' + id).then(res => {
-                this.tours.data.splice(this.tours.data.findIndex(x => x.id === id), 1)
-                this.$bvToast.toast('Экскурсия удалена', {
+                this.article.data.splice(this.article.data.findIndex(x => x.id === id), 1)
+                this.$bvToast.toast('Статья удалена', {
                     title: 'Внимание!',
                     autoHideDelay: 5000,
                     variant: 'success',
@@ -124,8 +95,14 @@ export default {
             })
         },
 
-        showTour(id) {
-            this.$router.push({ name: 'tours-id', params: {id: id} })
+        showArticle(id) {
+            this.$router.push({ name: 'articles-id', params: {id: id} })
+        },
+
+        addArticle() {
+            this.$axios.get(this.$route.path + '/create').then(res => {
+                this.$router.push({name: 'articles-id', params: {id: res.data.data.id}})
+            })
         }
 
     },
