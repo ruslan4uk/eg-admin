@@ -75,7 +75,7 @@ export default {
     methods: {
         rowClass(item, type) {
             if (!item) return
-            if (item.active === 2) return 'table-info'
+            if (item.active !== 2) return 'table-info'
         },
 
         linkGen(pageNum) {
