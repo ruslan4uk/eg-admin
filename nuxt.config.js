@@ -69,7 +69,7 @@ export default {
   ** Axios module configuration
   */
   axios: {
-    baseURL: 'http://api.excursguide.ru/api/v1/admin',
+    baseURL: 'https://api.excursguide.ru/api/v1/admin',
   },
 
   /**
@@ -118,5 +118,8 @@ export default {
     */
     extend(config, ctx) {
     }
-  }
+  },
+
+  serverMiddleware: ['redirect-ssl'],
+
 }
